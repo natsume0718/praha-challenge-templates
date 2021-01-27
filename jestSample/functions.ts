@@ -11,19 +11,19 @@ export const asyncSumOfArray = (numbers: number[]): Promise<number> => {
   });
 };
 
-// export const asyncSumOfArraySometimesZero = (
-//   numbers: number[]
-// ): Promise<number> => {
-//   return new Promise((resolve): void => {
-//     try {
-//       const database = new DatabaseMock(); // fixme: この関数をテストするには、DatabaseMockの使い方を変える必要がありそう！ヒント：依存性の注入
-//       database.save(numbers);
-//       resolve(sumOfArray(numbers));
-//     } catch (error) {
-//       resolve(0);
-//     }
-//   });
-// };
+export const asyncSumOfArraySometimesZero = (
+  numbers: number[]
+): Promise<number> => {
+  return new Promise((resolve): void => {
+    try {
+      const database = new DatabaseMock(); // fixme: この関数をテストするには、DatabaseMockの使い方を変える必要がありそう！ヒント：依存性の注入
+      database.save(numbers);
+      resolve(sumOfArray(numbers));
+    } catch (error) {
+      resolve(0);
+    }
+  });
+};
 
 // export const getFirstNameThrowIfLong = async (
 //   maxNameLength: number
