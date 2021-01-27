@@ -5,11 +5,11 @@ export const sumOfArray = (numbers: number[]): number => {
   return numbers.reduce((a: number, b: number): number => a + b);
 };
 
-// export const asyncSumOfArray = (numbers: number[]): Promise<number> => {
-//   return new Promise((resolve): void => {
-//     resolve(sumOfArray(numbers));
-//   });
-// };
+export const asyncSumOfArray = (numbers: number[]): Promise<number> => {
+  return new Promise((resolve): void => {
+    resolve(sumOfArray(numbers));
+  });
+};
 
 // export const asyncSumOfArraySometimesZero = (
 //   numbers: number[]
