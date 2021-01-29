@@ -3,9 +3,12 @@ import {
   sumOfArray,
   asyncSumOfArray,
   asyncSumOfArraySometimesZero,
+  getFirstNameThrowIfLong,
 } from "../functions";
 import { mocked } from "ts-jest/utils";
 import { DatabaseMock } from "../util";
+import { NameApiService } from "../nameApiService";
+import axios from "axios";
 
 describe("sumOfArray", (): void => {
   test(`sumOfArrayは正常に計算を行います`, (): void => {
@@ -57,16 +60,47 @@ describe("asyncSumOfArraySometimesZero", (): void => {
     expect(asyncSumOfArraySometimesZero([])).rejects.toMatch("error");
   });
 });
-  test(`asyncSumOfArraySometimesZeroは正常に計算を行います`, (): void => {
-    expect(asyncSumOfArraySometimesZero([1, 1])).resolves.toBe(2);
-  });
-  test(`asyncSumOfArraySometimesZeroは正常に計算を行います`, (): void => {
-    expect(asyncSumOfArraySometimesZero([1, 2, 3])).resolves.toBe(6);
-  });
-  test(`asyncSumOfArraySometimesZeroはエラーをスローします`, (): void => {
-    mocked(new DatabaseMock()).save.mockImplementationOnce((): void => {
-      throw new Error();
+
+jest.mock("axios");
+describe("nameApiService", (): void => {
+  const service = new NameApiService();
+
+  const name = "hoge";
+  const tooLongName = "fugggggggggggggaa";
+
+  test(`nameApiServiceは正常に名前を返します`, (): void => {
+    mocked(axios, true).get.mockResolvedValue({
+      data: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        first_name: name,
+      },
     });
-    expect(asyncSumOfArraySometimesZero([])).rejects.toMatch("error");
+    expect(service.getFirstName()).resolves.toBe(name);
+  });
+  test(`nameApiServiceはエラーをスローします`, (): void => {
+    mocked(axios, true).get.mockResolvedValue({
+      data: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        first_name: tooLongName,
+      },
+    });
+    expect(service.getFirstName()).rejects.toMatch("Error");
+  });
+});
+
+// 全体モックにすると上部のテストに影響が出る
+// jest.mock("../nameApiService");
+describe("getFirstNameThrowIfLong", (): void => {
+  const name = "yamada";
+  // 上部のテストに影響が出る
+  // mocked(new NameApiService()).getFirstName.mockRejectedValue(name);
+  jest.spyOn(NameApiService.prototype, "getFirstName").mockResolvedValue(name);
+  test(`getFirstNameThrowIfLongは正常に名前を返します`, async () => {
+    await expect(getFirstNameThrowIfLong(name.length + 1)).resolves.toBe(name);
+  });
+  test(`getFirstNameThrowIfLongはエラーをスローします`, async () => {
+    await expect(getFirstNameThrowIfLong(name.length - 1)).rejects.toThrow(
+      "first_name too long"
+    );
   });
 });
