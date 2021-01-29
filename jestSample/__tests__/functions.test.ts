@@ -43,6 +43,20 @@ describe("asyncSumOfArray", (): void => {
 jest.mock("../util/index.ts");
 describe("asyncSumOfArraySometimesZero", (): void => {
   mocked(new DatabaseMock()).save.mockImplementationOnce((): void => {});
+
+  test(`asyncSumOfArraySometimesZeroは正常に計算を行います`, (): void => {
+    expect(asyncSumOfArraySometimesZero([1, 1])).resolves.toBe(2);
+  });
+  test(`asyncSumOfArraySometimesZeroは正常に計算を行います`, (): void => {
+    expect(asyncSumOfArraySometimesZero([1, 2, 3])).resolves.toBe(6);
+  });
+  test(`asyncSumOfArraySometimesZeroはエラーをスローします`, (): void => {
+    mocked(new DatabaseMock()).save.mockImplementationOnce((): void => {
+      throw new Error();
+    });
+    expect(asyncSumOfArraySometimesZero([])).rejects.toMatch("error");
+  });
+});
   test(`asyncSumOfArraySometimesZeroは正常に計算を行います`, (): void => {
     expect(asyncSumOfArraySometimesZero([1, 1])).resolves.toBe(2);
   });
