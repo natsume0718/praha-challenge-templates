@@ -1,7 +1,7 @@
 // todo: ここに単体テストを書いてみましょう！
 import {
   sumOfArray,
-  asyncSumOfArray,
+  // asyncSumOfArray,
   asyncSumOfArraySometimesZero,
   getFirstNameThrowIfLong,
 } from "../functions";
@@ -104,3 +104,18 @@ describe("getFirstNameThrowIfLong", (): void => {
     );
   });
 });
+
+// const sumOfArrays = (numbers: number[]): number => {
+//   return numbers.reduce((a: number, b: number): number => a + b);
+// };
+
+// const hoge = [
+//   [[1, 1], 2],
+//   [[1, 2, 3], 6],
+// ];
+
+// test.each(hoge)(".add(%i, %i)", (first, expected) => {
+//   if (Array.isArray(first)) {
+//     expect(sumOfArrays(first)).toBe(expected);
+//   }
+// });
