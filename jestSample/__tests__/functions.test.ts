@@ -1,7 +1,7 @@
 // todo: ここに単体テストを書いてみましょう！
 import {
   sumOfArray,
-  // asyncSumOfArray,
+  asyncSumOfArray,
   asyncSumOfArraySometimesZero,
   getFirstNameThrowIfLong,
 } from "../functions";
@@ -69,7 +69,7 @@ describe("nameApiService", (): void => {
   const tooLongName = "fugggggggggggggaa";
 
   test(`nameApiServiceは正常に名前を返します`, (): void => {
-    mocked(axios, true).get.mockResolvedValue({
+    (axios.get as any).mockResolvedValue({
       data: {
         // eslint-disable-next-line @typescript-eslint/camelcase
         first_name: name,
@@ -95,9 +95,11 @@ describe("getFirstNameThrowIfLong", (): void => {
   // 上部のテストに影響が出る
   // mocked(new NameApiService()).getFirstName.mockRejectedValue(name);
   jest.spyOn(NameApiService.prototype, "getFirstName").mockResolvedValue(name);
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   test(`getFirstNameThrowIfLongは正常に名前を返します`, async () => {
     await expect(getFirstNameThrowIfLong(name.length + 1)).resolves.toBe(name);
   });
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   test(`getFirstNameThrowIfLongはエラーをスローします`, async () => {
     await expect(getFirstNameThrowIfLong(name.length - 1)).rejects.toThrow(
       "first_name too long"
