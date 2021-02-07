@@ -69,7 +69,7 @@ describe("nameApiService", (): void => {
   const tooLongName = "fugggggggggggggaa";
 
   test(`nameApiServiceは正常に名前を返します`, (): void => {
-    (axios.get as any).mockResolvedValue({
+    mocked(axios, true).get.mockResolvedValue({
       data: {
         // eslint-disable-next-line @typescript-eslint/camelcase
         first_name: name,
